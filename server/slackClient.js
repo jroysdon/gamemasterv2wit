@@ -29,9 +29,9 @@ console.log("MESSAGE : ", message);
                     throw new Error("Could not extract intent.")
                 }
                 console.log("RESPONSE :" , res);
-                console.log("INTENT : ",res.primary[0].value);
-                // res.primary = _.orderBy(res.primary, ['confidence', 'value', 'type'], ['desc']);
-                // console.log("SORTED INTENT : ",res.primary);
+                console.log("PRIMARY : ",res.primary[0].value);
+                res.primary = _.orderBy(res.primary, ['confidence', 'value', 'type'], ['desc']);
+                console.log("SORTED PRIMARY : ",res.primary);
 
                 const intent = require('./intents/' + res.primary[0].value + 'Intent');
 

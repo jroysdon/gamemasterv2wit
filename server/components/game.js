@@ -44,13 +44,13 @@ gameSchema.methods.findByDuration = function (min,max) {
 
       Game.find(
         {'playingTime': range}).
-        sort({ yearPublished: -1 }).
+        sort({ name: 1 }).
         exec(
           function(err,bg){
             if (err){
               reject (err);
             }
-            console.log("BG :", bg);
+            //console.log("BG :", bg);
             resolve(bg);
           }
       );

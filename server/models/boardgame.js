@@ -15,6 +15,12 @@ const boardgame = {
     type: String,
     required : true
   },
+  image : {
+    type: String
+  },
+  thumbnail : {
+    type: String
+  },
   yearPublished : {
     type : String,
     required : true,

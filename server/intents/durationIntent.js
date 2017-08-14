@@ -2,56 +2,59 @@
 
 //const request = require('superagent');
 const _ = require('lodash');
+const he = require('he');
+
+var findDuration= require('../primaries/findDuration');
 
 
 module.exports.process = function process(intentData, registry, cb) {
 
-   console.log("intentData : ");
-   console.log(intentData);
+    console.log("intentData : ");
+    console.log(intentData);
 
-    if(intentData.intent[0].value !== 'duration')
-        return cb(new Error(`Expected duration intent, got ${intentData.intent[0].value}`));
-    //
-    //     // console.log("---- search_query : ");
-    //     // console.log(intentData.local_search_query[0].value);
-    //
-    // if(!intentData.search_query) return cb(new Error('Missing game title in gametitle intent'));
-    //
-    // // const gameTitle = intentData.location[0].value.replace(/,.?gamemaster/i, '');
-    // const gameTitle = intentData.search_query[0].value
-    //
-    // //console.log("gameTitle : " + gameTitle);
-    //
-    // const service = registry.get('gameTitle');
-    // if(!service) return cb(false, 'No Game Title service available');
-    //
-    // request.get(`http://${service.ip}:${service.port}/service/${gameTitle}`, (err, res) => {
-    //     if(err || res.statusCode != 200 || !res.body.result) {
-    //         console.log(err);
-    //         return cb(false, `I had a problem finding the game title: ${gameTitle}`);
-    //     }
-    //
-        var strRange = '1';
-        var max = 0;
-        if (intentData.number.length > 1){
-          var hrMultiplier = 1;
-          if (intentData.number[0].value < 60) {
-            hrMultiplier = 60;
-          }
-          var min = intentData.number[0].value * hrMultiplier ;
-          if (intentData.number[1].value < 0){
-            max = intentData.number[1].value * -1 * hrMultiplier;
-          } else {
-             max = intentData.number[1].value * hrMultiplier;
+    if (intentData.primary[0].value !== 'duration')
+      return cb(new Error(`Expected duration intent, got ${intentData.primary[0].value}`));
+
+    console.log("---- Range : ");
+    console.log(intentData.range[0].value);
+
+    if (!intentData.range[0].value) return cb(new Error('Missing rangeValue in Duration intent'));
+
+    const range = intentData.range[0].value;
+    findDuration(range).then(
+        function(games, reject) {
+          console.log("REJECT :", reject);
+          if (reject) {
+            return cb(false, `Err: ${reject}`);
           }
 
-          strRange = min + '-' + max
-        } else {
-            strRange = intentData.number[0].value;
+          console.log("-=- Found Games: ", games.length);
+          var g = 'games';
+          var p = 'play';
+          if (games.length == 1) {
+            g = 'game'
+            p = 'plays'
+          };
+          var h = 'minutes';
+          if (_.split(range, '-', 1) < 9) {
+            h = 'hours';
+          }
+          var body = `I found *${games.length}* ${g} which ${p} in *${range} ${h}*.\n`;
+          body = body + `They are:\n`;
+          games.forEach(function(game) {
+            body = body + `• *${game.name}* (${game.yearPublished}) - ${game.playingTime} Minutes\n`;
+          });
+          if (games.length <= 5) {
+            body = body + `*Note:* _There may be more. I am adding to my repetoire daily._`
+          }
+          return cb(false, body);
+        })
+      .catch(
+        // Log the rejection reason
+        (reason) => {
+
+          console.log(`REASON: ${reason}.... not found`);
+          return cb(false, `:white_frowning_face: I had a problem finding the game that plays in *${range}* minutes`);
         }
-
-
-
-         return cb(false, `I will search for a game that plays in ${strRange} minutes`);
-    // });
-}
+      );
+    }
