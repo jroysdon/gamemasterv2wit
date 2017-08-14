@@ -11,21 +11,24 @@ mongoose.connect(process.env.MONGODB_URI + '/personalLibraries', { useMongoClien
 
 const personalLibrarySchema = mongoose.Schema(pLib);
 
-personalLibrarySchema.methods.like = function(user, title) {
+personalLibrarySchema.methods.like = function(user, gameId) {
   //console.log("TITLE: ",title);
-  var game = this;
+  var personalLibrary = this;
   return new Promise(
     function(resolve, reject) {
-      Game.find({
-        'name': title
-      }).
-      exec(function(err, bg) {
-        if (err) {
-          reject(err);
+      var tempLib = {
+        SlackID: user,
+        gameId: gameId,
+        likeToPlay: true
+      };
+      var lib = new PersonalLibrary(tempLib);
+      lib.save().then(function (err, product, numAffected) {
+          if (err) {
+            reject(err)
+          }
+          resolve('I added it to your Like Library')
         }
-        // console.log("BG :", bg);
-        resolve(bg);
-      });
+      )
     }
   )
 }

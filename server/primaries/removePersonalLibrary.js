@@ -9,14 +9,14 @@ const {PersonalLibrary} = require("../components/personalLibrary");
 var channel = 'C4KKDTP51';  // from SLACK
 var user =  'U4KMEKTC2';    // from SLACK
 
-var gameTitle = 'Splendor'
+var gameTitle = 148288;
 
 // -----------------------------------------------------------------------------
 // ----------- Lookup range in Mongo Database via custom GAME function
 // -----------------------------------------------------------------------------
 
 var pLib = new PersonalLibrary();
-pLib.like(user, gameTitle).then(
+pLib.like(user, gameTitle, {
   function(LU){
 
   }

@@ -9,7 +9,7 @@ const boardgame = {
   name : {
     type :String,
     required : true,
-    minlength : 5
+    minlength : 3
   },
   description : {
     type: String,

@@ -10,11 +10,11 @@ const pLib = {
     minlength: 1,
     trim: true
   },
-  name : {
-    type :String,
-    required : true,
-    minlength : 5
-  },
+  // name : {
+  //   type :String,
+  //   required : true,
+  //   minlength : 5
+  // },
   likeToPlay : {
     type: Boolean
   },

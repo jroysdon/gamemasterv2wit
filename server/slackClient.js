@@ -37,16 +37,16 @@ console.log("MESSAGE : ", message);
 
                 intent.process(res, registry, function(error, response) {
                     if(error) {
-                        console.log(error.message);
-                        return;
+                        console.log("ERROR : ",error.message);
+                        return rtm.sendMessage("<@" + message.user + ">, "  + error.message, message.channel);
+                        //return new Error(error.message);
                     }
-
                     return rtm.sendMessage("<@" + message.user + ">, "  + response, message.channel);
                 })
 
             } catch(err) {
-                 console.log(err);
-                 console.log(res);
+                 console.log("ERROR : ",err);
+                 console.log("RESPONSE : ",res);
                 rtm.sendMessage("Sorry, I don't know what you are talking about!", message.channel);
             }
 
