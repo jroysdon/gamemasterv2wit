@@ -11,16 +11,21 @@ var publisher = "Steve Jackson Games";
 // -----------------------------------------------------------------------------
 // ----------- Lookup range in Mongo Database via custom GAME function
 // -----------------------------------------------------------------------------
-
+module.exports = function findPublisher(publisher) {
+  return new Promise((resolve, reject) => {
 var gameLU = new Game();
 gameLU.findByPublisher(publisher).then(
   function(LU){
     if (_.isEmpty(LU)){
       console.log(`I ain't found sh!t that ${publisher} produces.`);
+      reject(`I ain't found sh!t that ${publisher} produces.`);
     } else {
       var s = '';
       if (LU.length > 1){s = 's'};
       console.log(`I found ${LU.length} game${s} which ${publisher} produces.` );
+      resolve(LU);
     }
   }
 );
+})
+};

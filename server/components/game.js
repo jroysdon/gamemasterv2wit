@@ -19,6 +19,15 @@ gameSchema.methods.findByName = function(title) {
       Game.find({
         'name': title
       }).
+      select(
+        { name: 1,
+          yearPublished: 1,
+          minPlayers:1,
+          maxPlayers:1,
+          playTime:1,
+          description:1,
+          thumbnail:1
+        }).
       exec(function(err, bg) {
         if (err) {
           reject(err);
@@ -45,6 +54,13 @@ gameSchema.methods.findByDuration = function (min,max) {
       Game.find(
         {'playingTime': range}).
         sort({ name: 1 }).
+        select(
+          { name: 1,
+            yearPublished: 1,
+            minPlayers:1,
+            maxPlayers:1,
+            playingTime:1
+          }).
         exec(
           function(err,bg){
             if (err){
@@ -63,14 +79,18 @@ gameSchema.methods.findByPlayers = function (min,max) {
   return new Promise(
     function (resolve,reject){
         Game.find(
-          {'minPlayers': min,
-          'maxPlayers': max
+          {'minPlayers': {$gte: min},
+          'maxPlayers': {$lte: max}
+
         }).
         //limit(10).
         sort({ yearPublished: -1 }).
         select(
           { name: 1,
             yearPublished: 1,
+            minPlayers:1,
+            maxPlayers:1,
+            playingTime:1
           }).
         exec(
           function(err,bg){
@@ -123,8 +143,11 @@ gameSchema.methods.findByPublisher = function (publisher) {
         select(
           { name: 1,
             yearPublished: 1,
+            minPlayers:1,
+            maxPlayers:1,
+            playingTime:1
           }).
-        exec(
+          exec(
           function(err,bg){
             if (err){
               reject (err);

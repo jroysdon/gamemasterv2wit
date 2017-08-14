@@ -1,7 +1,8 @@
 # gamemaster
 
 Cmd Wit word	Response	API Call 1	API Call 2	Notes
-I want to play XXXX on this day	I found  CC players who like that game and will ask around.			PM's to those who are in the list.
+I want to play XXXX on this day	I found  CC players who like that game and will ask around.		
+	PM's to those who are in the list.
 	I don't understand what day you are talking about. 			
 	I don't know what that game is			
 

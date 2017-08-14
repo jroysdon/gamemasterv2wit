@@ -19,7 +19,7 @@ module.exports.process = function process(intentData, registry, cb) {
         // console.log(intentData.search_query[0].value);
 
 
-    if(!intentData.search_query) return cb(new Error('Sorry, I am not sure what game you are wanting me to find.'));
+    if(!intentData.search_query || intentData.search_query[0].value == 'game') return cb(new Error('Sorry, I am not sure what game you are wanting me to find.'));
      const gameTitle = intentData.search_query[0].value
 
     findTitle(gameTitle).then(
